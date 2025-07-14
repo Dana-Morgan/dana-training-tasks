@@ -1,17 +1,19 @@
-
 import '../models/user.dart';
-import '../utils/name_utils.dart';
+
+enum AddUserResult {
+  success,
+  nameAlreadyExists,
+}
 
 class Library {
   final List<User> users = [];
 
-
-  void addUser(User user) {
-    final exists = users.any((u) => u.name == user.name);
+  AddUserResult addUser(User user) {
+    final exists = users.any((u) => u.name.toLowerCase() == user.name.toLowerCase());
     if (exists) {
-      print('User with this name already exists.');
-      return;
+      return AddUserResult.nameAlreadyExists;
     }
     users.add(user);
+    return AddUserResult.success;
   }
 }
