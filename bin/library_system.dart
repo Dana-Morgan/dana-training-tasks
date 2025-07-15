@@ -48,6 +48,7 @@ while (true) {
       print('User with this name already exists. Please enter a different name.');
       continue;
     } else {
+      print('User added successfully!');
       break;
     }
   }
