@@ -2,17 +2,24 @@ import '../utils/name_utils.dart';
 import '../utils/name_utils.dart';
 
 class User {
-  String _name;
+  String _originalName;
   String phoneNumber;
 
   User({
     required String name,
     required this.phoneNumber,
-  }) : _name = formatDisplayName(name);
+  }) : _originalName = name;
 
-  String get name => _name;
+  String get displayName => formatDisplayName(_originalName);
 
-  set name(String newName) {
-    _name = formatDisplayName(newName);
+  String get originalName => _originalName;
+
+  set originalName(String newName) {
+    _originalName = newName;
+  }
+
+  set phoneNumberValue(String newPhone) {
+    phoneNumber = newPhone;
   }
 }
+
