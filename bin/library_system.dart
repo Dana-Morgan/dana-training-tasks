@@ -5,6 +5,9 @@ import 'package:library_system/models/regular_member.dart';
 import 'package:library_system/models/librarian.dart';
 import 'package:library_system/ui/menus/librarian_menu.dart';
 import 'package:library_system/ui/menus/member_menu.dart';
+import 'package:library_system/models/genre.dart';
+import 'package:library_system/utils/genre_extensions.dart';
+import 'package:library_system/models/book.dart';
 
 void main() {
   final library = Library();
@@ -19,11 +22,36 @@ void main() {
     hireDate: DateTime.now(),
     position: 'Senior Librarian',
   ));
+  library.addBook(Book(
+    title: 'Sample Book',
+    author: 'John Smith',
+    genre: Genre.Fiction,
+    stock: 1,
+  ));
+  library.addBook(Book(
+    title: 'Another Book',
+    author: 'Jane Doe',
+    genre: Genre.non_Fiction_tt,
+    stock: 3,
+  ));
+  library.addBook(Book(
+    title: 'third Book',
+    author: 'Jane Doe',
+    genre: Genre.Biography,
+    stock: 0,
+  ));
 
   runLibrarySystem(library);
 }
 
 void runLibrarySystem(Library library) {
+
+  // test the genre extension
+  print('Available Genres:');
+  for (var genre in Genre.values) {
+    print(genre.normalizeGenreInput());
+  }
+
   while (true) {
     print('\nWelcome to the Library System');
     print('Please select your role:');
