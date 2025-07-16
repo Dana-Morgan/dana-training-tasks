@@ -3,6 +3,8 @@ import '../models/librarian.dart';
 import '../models/member.dart';
 import '../models/premium_member.dart';
 import '../models/regular_member.dart';
+import '../models/book.dart';
+import '../models/genre.dart';
 
 enum AddUserResult {
   success,
@@ -11,6 +13,7 @@ enum AddUserResult {
 
 class Library {
   final List<User> users = [];
+  final List<Book> books = [];
 
   AddUserResult addUser(User user) {
   final exists = users.any((u) => u.originalName == user.originalName);
@@ -57,7 +60,40 @@ class Library {
   } catch (e) { // i can also do orelse: ()=>null as User instead of try/catch
     return null;
   }
+  }
+
+  void addBook(Book book) {
+    books.add(book);
+  }
+
+  List<String> listAllBooksWithStock() {
+    return books.map((book) {
+      String warning = (book.stock <= 2 && book.stock > 0) ? ' (Warning: Only ${book.stock} left!)' : '';
+      warning = book.stock == 0 ? ' (Out of stock)' : warning;
+      return '${book.title} by ${book.author} - Stock: ${book.stock}$warning';
+    }).toList();
+  }
+
+  List<String> listAvailableBooksWithWarning() {
+    return books.where((b) => b.isAvailable).map((book) {
+      String warning = (book.stock <= 2 && book.stock > 0) ? ' (Warning: Only ${book.stock} left!)' : '';
+      warning = book.stock == 0 ? ' (Out of stock)' : warning;
+      return '${book.title} by ${book.author} - Stock: ${book.stock}$warning';
+    }).toList();
+  }
+
+  List<String> listBooksByGenre(Genre genre) {
+    var filtered = books.where((book) => book.genre == genre);
+    if (filtered.isEmpty) return ['No books found for genre: ${genre.toString().split('.').last}'];
+    return filtered.map((book) => book.toString()).toList();
+  }
+
+  List<String> searchBooksByTitle(String title) {
+    var filtered = books.where((book) => book.title.toLowerCase() == title.toLowerCase());
+    if (filtered.isEmpty) return ['No books found with title: $title'];
+    return filtered.map((book) => book.toString()).toList();
+  }
 }
 
 
-}
+

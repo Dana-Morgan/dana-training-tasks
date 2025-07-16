@@ -7,5 +7,12 @@ String formatDisplayName(String name) {
 
   if (trimmed.isEmpty) return '';
 
-  return trimmed[0].toUpperCase() + trimmed.substring(1).toLowerCase();
+  final words = trimmed.split(' ');
+
+  final capitalizedWords = words.map((word) {
+    if (word.isEmpty) return '';
+    return word[0].toUpperCase() + word.substring(1).toLowerCase();
+  });
+
+  return capitalizedWords.join(' ');
 }
