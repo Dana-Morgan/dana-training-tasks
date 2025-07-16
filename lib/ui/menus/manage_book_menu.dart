@@ -26,7 +26,7 @@ void handleManageBookMenu(Library library) {
         break;
       case '2':
         print('Listing available books:');
-        var availableBooks = library.listAvailableBooksWithWarning();
+        var availableBooks = library.listAvailableBooksWithWarning(showCriticalWarnings: true);
         for (var book in availableBooks) {
           print(book);
         }

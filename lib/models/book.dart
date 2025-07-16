@@ -1,10 +1,12 @@
-import 'genre.dart'; 
+import 'genre.dart';
+import 'stock_info.dart';
 
 class Book {
   String _title;
   String _author;
   Genre genre;
   int stock;
+  
 
   Book({
     required String title,
@@ -24,6 +26,8 @@ class Book {
 
   bool get isAvailable => stock > 0;
 
+  StockInfo get stockInfo => StockInfo(stock); // i think its assosiation ?
+
   void addStock(int count) {
     if (count > 0) {
       stock += count;
@@ -35,9 +39,10 @@ class Book {
       stock -= count;
     }
   }
+
   @override
   String toString() {
-    return 'Title: $title, Author: $author, Genre: ${genre.toString().split('.').last}, Stock: $stock';
+    String warning = stockInfo.warning.isNotEmpty ? ' (${stockInfo.warning})' : '';
+    return 'Title: $title, Author: $author, Genre: ${genre.toString().split('.').last}, Stock: $stock$warning';
   }
-
 }
