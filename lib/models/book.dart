@@ -35,5 +35,9 @@ class Book {
       stock -= count;
     }
   }
+  @override
+  String toString() {
+    return 'Title: $title, Author: $author, Genre: ${genre.toString().split('.').last}, Stock: $stock';
+  }
 
 }
