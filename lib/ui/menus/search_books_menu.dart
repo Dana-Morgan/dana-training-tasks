@@ -1,6 +1,7 @@
 import 'dart:io';
+import 'package:library_system/services/library_service.dart';
 
-void showSearchBooksMenu() {
+void showSearchBooksMenu(Library library) {
   while (true) {
     print('\nSearch Books Menu:');
     print('1. List All Books');

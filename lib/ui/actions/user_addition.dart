@@ -3,6 +3,7 @@ import 'package:library_system/services/library_service.dart';
 import 'package:library_system/models/librarian.dart';
 import 'package:library_system/models/regular_member.dart';
 import 'package:library_system/models/premium_member.dart';
+import 'package:library_system/models/user.dart';
 
 void handleUserAddition(Library library) {
   stdout.write('Enter user type (Librarian/Member) or "exit" to cancel: ');
@@ -24,30 +25,30 @@ void _addLibrarian(Library library) {
   String? name = stdin.readLineSync();
   stdout.write('Enter phone number: ');
   String? phone = stdin.readLineSync();
-  stdout.write('Enter employee ID: ');
-  String? employeeId = stdin.readLineSync();
   stdout.write('Enter position (default is Staff): ');
   String? position = stdin.readLineSync();
 
-  if ([name, phone, employeeId].any((v) => v == null || v.trim().isEmpty)) {
+  if ([name, phone].any((v) => v == null || v.trim().isEmpty)) {
     print('Invalid input. Please try again.');
     return;
   }
 
-  final result = library.addUser(Librarian(
+  User user = Librarian(
     name: name!.trim(),
     phoneNumber: phone!.trim(),
-    employeeId: employeeId!.trim(),
     hireDate: DateTime.now(),
     position: (position?.trim().isEmpty ?? true) ? 'Staff' : position!.trim(),
-  ));
+  );
 
-  if (result == AddUserResult.nameAlreadyExists) {
-    print('User with this name already exists.');
+  AddUserResult result = library.addUser(user);
+
+  if (result == AddUserResult.success) {
+    print('Librarian added successfully with ID: ${user.id}');
   } else {
-    print('Librarian added successfully!');
+    print('Failed to add librarian.');
   }
 }
+
 
 void _addMember(Library library) {
   stdout.write('Enter user type (regular/premium): ');
@@ -65,18 +66,25 @@ void _addMember(Library library) {
   stdout.write('Enter phone number: ');
   String? phone = stdin.readLineSync();
 
-  if (name == null || phone == null) {
+  if (name == null || phone == null || name.trim().isEmpty || phone.trim().isEmpty) {
     print('Invalid input.');
     return;
   }
 
-  final result = (memberType.toLowerCase() == 'regular')
-      ? library.addUser(RegularMember(name: name.trim(), phoneNumber: phone.trim()))
-      : library.addUser(PremiumMember(name: name.trim(), phoneNumber: phone.trim()));
+  User user;
+  AddUserResult result;
 
-  if (result == AddUserResult.nameAlreadyExists) {
-    print('User with this name already exists.');
+  if (memberType.toLowerCase() == 'regular') {
+    user = RegularMember(name: name.trim(), phoneNumber: phone.trim());
   } else {
-    print('Member added successfully!');
+    user = PremiumMember(name: name.trim(), phoneNumber: phone.trim());
+  }
+
+  result = library.addUser(user);
+
+  if (result == AddUserResult.success) {
+    print('Member added successfully with ID: ${user.id}');
+  } else {
+    print('Failed to add member.');
   }
 }

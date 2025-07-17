@@ -1,81 +1,89 @@
 import 'dart:io';
 import 'package:library_system/services/library_service.dart';
-import 'package:library_system/models/premium_member.dart';
-import 'package:library_system/models/regular_member.dart';
 import 'package:library_system/models/librarian.dart';
-import 'package:library_system/ui/menus/librarian_menu.dart';
-import 'package:library_system/ui/menus/member_menu.dart';
+import 'package:library_system/models/book.dart';
 import 'package:library_system/models/genre.dart';
 import 'package:library_system/utils/genre_extensions.dart';
-import 'package:library_system/models/book.dart';
+import 'package:library_system/auth/login.dart';
+import 'package:library_system/auth/register.dart';
 
 void main() {
   final library = Library();
+  library.addUser(
+    Librarian(
+      name: 'John Doe',
+      phoneNumber: '1234567890',
+      password: 'admin123',
+      hireDate: DateTime.now(),
+      position: 'Senior Librarian',
+      id: 'lib001',
+    ),
+  );
 
-  library.addUser(RegularMember(name: 'dana555morgan', phoneNumber: '8512512'));
-  library.addUser(RegularMember(name: 'dana555Morgan', phoneNumber: '855512'));
-  library.addUser(PremiumMember(name: 'suzan55', phoneNumber: '48523154'));
-  library.addUser(Librarian(
-    name: 'John Doe',
-    phoneNumber: '1234567890',
-    employeeId: 'EMP001',
-    hireDate: DateTime.now(),
-    position: 'Senior Librarian',
-  ));
-  library.addBook(Book(
-    title: 'Sample Book',
-    author: 'John Smith',
-    genre: Genre.Fiction,
-    stock: 1,
-  ));
-  library.addBook(Book(
-    title: 'Another Book',
-    author: 'Jane Doe',
-    genre: Genre.non_Fiction_tt,
-    stock: 3,
-  ));
-  library.addBook(Book(
-    title: 'third Book',
-    author: 'Jane Doe',
-    genre: Genre.Biography,
-    stock: 0,
-  ));
+  library.addBook(
+    Book(
+      title: 'Sample Book',
+      author: 'John Smith',
+      genre: Genre.Fiction,
+      stock: 1,
+    ),
+  );
+  library.addBook(
+    Book(
+      title: 'Another Book',
+      author: 'Jane Doe',
+      genre: Genre.non_Fiction_tt,
+      stock: 3,
+    ),
+  );
+  library.addBook(
+    Book(
+      title: 'Third Book',
+      author: 'Jane Doe',
+      genre: Genre.Biography,
+      stock: 0,
+    ),
+  );
 
   runLibrarySystem(library);
 }
 
 void runLibrarySystem(Library library) {
-
-  // test the genre extension
+  print('Welcome to the Library System!');
+  print('list all users:');
+  for (var user in library.listUsers()) {
+    print(user);
+  }
   print('Available Genres:');
   for (var genre in Genre.values) {
-    print(genre.normalizeGenreInput());
+    print('- ${genre.normalizeGenreInput()}');
   }
 
+  authenticateFlow(library);
+}
+
+void authenticateFlow(Library library) {
   while (true) {
-    print('\nWelcome to the Library System');
-    print('Please select your role:');
-    print('1. Librarian');
-    print('2. Member');
+    print('\nAuthentication Menu');
+    print('1. Login');
+    print('2. Register "Member"');
     print('3. Exit');
 
-    String? roleInput = stdin.readLineSync();
+    stdout.write('Enter your choice: ');
+    String? input = stdin.readLineSync();
 
-    if (roleInput == null || roleInput == '3') {
-      print('Exiting...');
-      break;
-    }
-
-    switch (roleInput) {
+    switch (input) {
       case '1':
-        handleLibrarianMenu(library);
+        login(library);
         break;
       case '2':
-      print('Member Menu is not implemented yet.');
-       handleMemberMenu(); 
+        register(library);
         break;
+      case '3':
+        print('Goodbye!');
+        exit(0);
       default:
-        print('Invalid role selected.');
+        print('Invalid option.');
     }
   }
 }

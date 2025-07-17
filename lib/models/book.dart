@@ -2,19 +2,18 @@ import 'genre.dart';
 import 'stock_info.dart';
 
 class Book {
-  String _title;
-  String _author;
+  final String _title;
+  final String _author;
   Genre genre;
   int stock;
-  
 
   Book({
     required String title,
     required String author,
     required this.genre,
     this.stock = 0,
-  })  : _title = _formatText(title),
-        _author = _formatText(author);
+  }) : _title = _formatText(title),
+       _author = _formatText(author);
 
   String get title => _title;
   String get author => _author;
@@ -42,7 +41,9 @@ class Book {
 
   @override
   String toString() {
-    String warning = stockInfo.warning.isNotEmpty ? ' (${stockInfo.warning})' : '';
+    String warning = stockInfo.warning.isNotEmpty
+        ? ' (${stockInfo.warning})'
+        : '';
     return 'Title: $title, Author: $author, Genre: ${genre.toString().split('.').last}, Stock: $stock$warning';
   }
 }
