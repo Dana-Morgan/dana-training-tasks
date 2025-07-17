@@ -43,7 +43,7 @@ void handleManageUserMenu(Library library) {
           User? user = library.findUserByName(name);
           if (user != null) {
             if (user is Librarian) {
-              print('Found Librarian: ${user.displayName}, Employee ID: ${user.employeeId}, Position: ${user.position}, Phone: ${user.phoneNumber}, Hire Date: ${user.hireDate}');
+              print('Found Librarian: ${user.displayName}, Position: ${user.position}, Phone: ${user.phoneNumber}, Hire Date: ${user.hireDate}');
             } else if (user is Member) {
               print('Found Member: ${user.displayName}, Phone: ${user.phoneNumber}, Max Borrow Limit: ${user.maxBorrowLimit}');
             } else {
